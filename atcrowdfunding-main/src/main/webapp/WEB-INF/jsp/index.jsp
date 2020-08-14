@@ -7,14 +7,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="zh_CN">
   <head>
+    <base href="<%=basePath %>">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="static/css/carousel.css">
+    <%@ include file="/WEB-INF/jsp/common/css.jsp" %>
     <style>
     h3 {
         font-weight:bold;
@@ -140,7 +139,7 @@ h3.break>a {
           <img src="static/img/carousel-2.jpg" alt="Second slide">
         </div>
         <div class="item" onclick="window.location.href='project.html'" style="cursor:pointer;">
-          <img src="static/static/img/carousel-3.jpg" alt="Third slide">
+          <img src="static/img/carousel-3.jpg" alt="Third slide">
         </div>
       </div>
       <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -606,30 +605,13 @@ h3.break>a {
     </div>
 </div> 
       
-      <!-- FOOTER -->
-<div class="container">
-    <div class="row clearfix">
-        <div class="col-md-12 column">
-            <div id="footer">
-                <div class="footerNav">
-                     <a rel="nofollow" href="http://www.atguigu.com">关于我们</a> | <a rel="nofollow" href="http://www.atguigu.com">服务条款</a> | <a rel="nofollow" href="http://www.atguigu.com">免责声明</a> | <a rel="nofollow" href="http://www.atguigu.com">网站地图</a> | <a rel="nofollow" href="http://www.atguigu.com">联系我们</a>
-                </div>
-                <div class="copyRight">
-                    Copyright ?2017-2017atguigu.com 版权所有
-                </div>
-            </div>
-            
-        </div>
-    </div>
-</div>
+    <!-- FOOTER -->
+    <%@ include file="/WEB-INF/jsp/common/footer.jsp" %>
 
     </div><!-- /.container -->
 
 
-    <script src="static/jquery/jquery-2.1.1.min.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/script/docs.min.js"></script>
-    <script src="static/script/back-to-top.js"></script>
+    <%@ include file="/WEB-INF/jsp/common/js.jsp" %>
     <script>
     $(".thumbnail img").css("cursor", "pointer");
     $(".thumbnail img").click(function(){

@@ -9,14 +9,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="zh-CN">
 <head>
+<base href="<%=basePath %>">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keys" content="">
 <meta name="author" content="">
-<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="static/css/font-awesome.min.css">
+<%@ include file="/WEB-INF/jsp/common/css.jsp" %>
 <link rel="stylesheet" href="static/css/login.css">
 <style>
 </style>
@@ -64,8 +64,7 @@
 				登录</a>
 		</form>
 	</div>
-	<script src="static/jquery/jquery-2.1.1.min.js"></script>
-	<script src="static/bootstrap/js/bootstrap.min.js"></script>
+	<%@ include file="/WEB-INF/jsp/common/js.jsp" %>
 	<script>
 		function dologin() {
 			$("#loginForm").submit();

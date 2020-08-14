@@ -1,6 +1,7 @@
 package com.atecut.atcrowdfunding.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -13,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.atecut.atcrowdfunding.bean.TAdmin;
+import com.atecut.atcrowdfunding.bean.TMenu;
 import com.atecut.atcrowdfunding.service.TAdminService;
+import com.atecut.atcrowdfunding.service.TMenuService;
 import com.atecut.atcrowdfunding.util.Const;
 
 @Controller
@@ -24,6 +27,9 @@ public class DispatcherController {
 	@Autowired
 	TAdminService adminService;
 	
+	@Autowired
+	TMenuService menuService;
+
 	@RequestMapping("/index")
 	public String index() {
 		log.debug("跳转到系统主页面");
@@ -47,13 +53,21 @@ public class DispatcherController {
 			TAdmin admin = adminService.getTAdminByLogin(paramMap);
 			session.setAttribute(Const.LOGIN_ADMIN, admin);
 			log.debug("登录成功");
-			return "main";
+			return "redirect:/main";
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug("登录失败={}", e.getMessage());
 			model.addAttribute("message", e.getMessage());
 			return "login";
 		}
+	}
+	
+	@RequestMapping("/main")
+	public String main(HttpSession session) {
+		log.debug("跳转到后台系统main页面");
+		List<TMenu> menuList = menuService.listMenuAll();
+		session.setAttribute("menuList", menuList);
+		return "main";
 	}
 	
 	@RequestMapping("/logout")
