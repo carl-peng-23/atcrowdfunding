@@ -15,6 +15,11 @@
     </plugins>
   </build>
   <dependencies>
+    <!-- 分页 -->
+    <dependency>
+        <groupId>com.github.pagehelper</groupId>
+        <artifactId>pagehelper</artifactId>
+    </dependency>
   	<dependency>
   		<groupId>com.atecut.atcrowdfunding</groupId>
   		<artifactId>atcrowdfunding-bean</artifactId>

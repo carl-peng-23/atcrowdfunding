@@ -12,14 +12,17 @@ import com.atecut.atcrowdfunding.bean.TAdmin;
 import com.atecut.atcrowdfunding.bean.TAdminExample;
 import com.atecut.atcrowdfunding.mapper.TAdminMapper;
 import com.atecut.atcrowdfunding.service.TAdminService;
+import com.atecut.atcrowdfunding.util.AppDateUtils;
 import com.atecut.atcrowdfunding.util.Const;
 import com.atecut.atcrowdfunding.util.MD5Util;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class TAdminServiceImpl implements TAdminService {
 	
 	@Autowired
 	TAdminMapper adminMapper;
+
 
 	@Override
 	public TAdmin getTAdminByLogin(Map<String, Object> paramMap) throws LoginException {
@@ -48,6 +51,44 @@ public class TAdminServiceImpl implements TAdminService {
 		}else {
 			throw new LoginException(Const.LOGIN_LOGINACCT_ERROR);
 		}
+	}
+
+
+	@Override
+	public PageInfo<TAdmin> listAdminPage(Map<String, Object> paramMap) {
+		TAdminExample example = new TAdminExample();
+		example.setOrderByClause("createtime desc");
+		List<TAdmin> list = adminMapper.selectByExample(example);
+		PageInfo<TAdmin> page = new PageInfo<TAdmin>(list, 5);
+		return page;
+	}
+
+
+	@Override
+	public void saveTAdmin(TAdmin admin) {
+		admin.setUserpswd("123456");
+		admin.setCreatetime(AppDateUtils.getFormatTime());
+		// 如果admin中属性为null，为null的属性不参加保存
+		adminMapper.insertSelective(admin);
+	}
+
+
+	@Override
+	public TAdmin getTAdminById(Integer id) {
+		TAdmin admin = adminMapper.selectByPrimaryKey(id);
+		return admin;
+	}
+
+
+	@Override
+	public void updateTAdmin(TAdmin admin) {
+		adminMapper.updateByPrimaryKeySelective(admin);
+	}
+
+
+	@Override
+	public void deleteByATdminId(Integer id) {
+		adminMapper.deleteByPrimaryKey(id);
 	}
 	
 }

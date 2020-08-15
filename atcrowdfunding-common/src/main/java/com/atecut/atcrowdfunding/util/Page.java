@@ -40,6 +40,7 @@ public class Page<T> {
 		return totalno;
 	}
 
+	@SuppressWarnings("unused")
 	private void setTotalno(int totalno) {
 		this.totalno = totalno;
 	}

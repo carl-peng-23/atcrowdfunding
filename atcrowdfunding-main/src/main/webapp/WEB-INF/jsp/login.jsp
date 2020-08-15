@@ -43,13 +43,13 @@
 			    <div class="form-group has-success has-feedback" style="color:red">${requestScope.message }</div>
 			</c:if>
 			<div class="form-group has-success has-feedback">
-				<input type="text" class="form-control" id="loginacct" value="${param.loginacct }" 
+				<input type="text" class="form-control" id="loginacct" value="zhangsan" 
 					name="loginacct" placeholder="请输入登录账号" autofocus>
 					<span class="glyphicon glyphicon-user form-control-feedback"></span>
 			</div>
 			<div class="form-group has-success has-feedback">
 				<input type="password" class="form-control" id="userpswd"
-					name="userpswd" placeholder="请输入登录密码" style="margin-top:10px;">
+					name="userpswd" placeholder="请输入登录密码" style="margin-top:10px;" value="123456">
 				<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 			</div>
 
