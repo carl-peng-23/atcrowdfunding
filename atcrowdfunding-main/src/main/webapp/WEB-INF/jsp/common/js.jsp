@@ -4,3 +4,4 @@
 <script src="static/script/docs.min.js"></script>
 <script src="static/script/back-to-top.js"></script>
 <script src="static/jquery/layer/layer.js"></script>
+<script src="static/ztree/jquery.ztree.all-3.5.min.js"></script>

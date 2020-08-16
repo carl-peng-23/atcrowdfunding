@@ -3,3 +3,4 @@
 <link rel="stylesheet" href="static/css/font-awesome.min.css">
 <link rel="stylesheet" href="static/css/main.css">
 <link rel="stylesheet" href="static/css/carousel.css">
+<link rel="stylesheet" href="static/ztree/zTreeStyle.css">
