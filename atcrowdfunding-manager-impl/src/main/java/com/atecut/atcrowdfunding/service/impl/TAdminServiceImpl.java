@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.atecut.atcrowdfunding.bean.TAdmin;
 import com.atecut.atcrowdfunding.bean.TAdminExample;
+import com.atecut.atcrowdfunding.bean.TAdminExample.Criteria;
 import com.atecut.atcrowdfunding.mapper.TAdminMapper;
 import com.atecut.atcrowdfunding.service.TAdminService;
 import com.atecut.atcrowdfunding.util.AppDateUtils;
@@ -57,6 +58,17 @@ public class TAdminServiceImpl implements TAdminService {
 	@Override
 	public PageInfo<TAdmin> listAdminPage(Map<String, Object> paramMap) {
 		TAdminExample example = new TAdminExample();
+		String condition = (String) paramMap.get("condition");
+		if(!"".equals(condition)) {
+			example.createCriteria().andLoginacctLike("%" + condition + "%");
+			Criteria criteria2 = example.createCriteria();
+			criteria2.andUsernameLike("%" + condition + "%");
+			Criteria criteria3 = example.createCriteria();
+			criteria3.andEmailLike("%" + condition + "%");
+			example.or(criteria2);
+			example.or(criteria3);
+		}
+		
 		example.setOrderByClause("createtime desc");
 		List<TAdmin> list = adminMapper.selectByExample(example);
 		PageInfo<TAdmin> page = new PageInfo<TAdmin>(list, 5);
@@ -89,6 +101,12 @@ public class TAdminServiceImpl implements TAdminService {
 	@Override
 	public void deleteByATdminId(Integer id) {
 		adminMapper.deleteByPrimaryKey(id);
+	}
+
+
+	@Override
+	public void batchDeleteByATdminId(String ids) {
+		adminMapper.batchDeleteByATdminId(ids);
 	}
 	
 }

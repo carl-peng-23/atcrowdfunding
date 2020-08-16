@@ -27,10 +27,12 @@ public class TAdminController {
 	@RequestMapping("/admin/index")
 	public String index(@RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
 						@RequestParam(value = "pageSize", required = false, defaultValue = "2") Integer pageSize, 
+						@RequestParam(value = "condition", required = false, defaultValue = "") String condition, 
 						Model model) {
 		
 		PageHelper.startPage(pageNum, pageSize); // 线程绑定
 		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("condition", condition);
 		PageInfo<TAdmin> page = adminService.listAdminPage(paramMap);
 		model.addAttribute("page", page);
 		return "admin/index";
@@ -63,6 +65,14 @@ public class TAdminController {
 	@RequestMapping("/admin/doDelete")
 	public String toUpdate(Integer id, String pageNum) {
 		adminService.deleteByATdminId(id);
+		return "redirect:/admin/index?pageNum=" + pageNum;
+	}
+
+	@RequestMapping("/admin/batchDelete")
+	public String batchDelete(String ids, String pageNum) {
+		log.debug("ids={}", ids);
+		log.debug("pageNum={}", pageNum);
+		adminService.batchDeleteByATdminId(ids);
 		return "redirect:/admin/index?pageNum=" + pageNum;
 	}
 }

@@ -27,4 +27,6 @@ public interface TAdminMapper {
     int updateByPrimaryKeySelective(TAdmin record);
 
     int updateByPrimaryKey(TAdmin record);
+    
+    void batchDeleteByATdminId(String ids);
 }

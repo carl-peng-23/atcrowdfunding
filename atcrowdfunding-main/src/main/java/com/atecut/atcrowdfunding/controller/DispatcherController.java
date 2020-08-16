@@ -53,6 +53,8 @@ public class DispatcherController {
 			TAdmin admin = adminService.getTAdminByLogin(paramMap);
 			session.setAttribute(Const.LOGIN_ADMIN, admin);
 			log.debug("登录成功");
+			List<TMenu> menuList = menuService.listMenuAll();
+			session.setAttribute("menuList", menuList);
 			return "redirect:/main";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,8 +67,8 @@ public class DispatcherController {
 	@RequestMapping("/main")
 	public String main(HttpSession session) {
 		log.debug("跳转到后台系统main页面");
-		List<TMenu> menuList = menuService.listMenuAll();
-		session.setAttribute("menuList", menuList);
+		if(session.getAttribute("menuList") == null)
+			return "redirect:/login";
 		return "main";
 	}
 	

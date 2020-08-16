@@ -44,4 +44,10 @@ public interface TAdminService {
 	 * @param id
 	 */
 	void deleteByATdminId(Integer id);
+	
+	/**
+	 * 批量删除
+	 * @param ids
+	 */
+	void batchDeleteByATdminId(String ids);
 }

@@ -9,6 +9,12 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="createtime" jdbcType="CHAR" property="createtime" />
   </resultMap>
+  
+  <!--   void batchDeleteByATdminId(String ids); -->
+  <delete id="batchDeleteByATdminId">
+    DELETE FROM t_admin WHERE id IN (${value});
+  </delete>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
