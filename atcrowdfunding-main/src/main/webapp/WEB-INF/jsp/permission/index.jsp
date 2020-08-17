@@ -33,20 +33,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">添加菜单</h4>
+        <h4 class="modal-title">添加权限</h4>
       </div>
       <input type="hidden" id="pid">
       <div>
-          <label for="name">菜单名称</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="请输入菜单名称">
+          <label for="name">许可名称</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="请输入许可名称">
       </div>
       <div>
-          <label for="icon">图标</label>
+          <label for="icon">许可图标</label>
           <input type="text" class="form-control" id="icon" name="icon" placeholder="请输入icon">
       </div>
       <div>
-          <label for="url">地址</label>
-          <input type="text" class="form-control" id="url" name="url" placeholder="请输入url">
+          <label for="title">许可标题</label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="请输入许可标题">
       </div>
       
       <div class="modal-footer">
@@ -67,16 +67,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       </div>
       <input type="hidden" id="update-id">
       <div>
-          <label for="name">菜单名称</label>
+          <label for="name">许可名称</label>
           <input type="text" class="form-control" id="update-name" name="name">
       </div>
       <div>
-          <label for="icon">图标</label>
+          <label for="icon">许可图标</label>
           <input type="text" class="form-control" id="update-icon" name="icon">
       </div>
       <div>
-          <label for="name">地址</label>
-          <input type="url" class="form-control" id="update-url" name="url">
+          <label for="title">许可标题</label>
+          <input type="text" class="form-control" id="update-title" name="title">
       </div>
       
       <div class="modal-footer">
@@ -126,16 +126,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
             });
             
-            initMenuTree();
+            initPermissionTree();
             
-            function initMenuTree() {
+            function initPermissionTree() {
                 var setting = {
 		            data: {
 		                simpleData: {
 		                    enable: true,
 		                    pIdKey: "pid",
-                            rootPId: 0
-		                }
+		                },
+		                key: {
+                            name: "title"
+                        }
 		            },
 		            view:{
 				        addDiyDom: function(treeId, treeNode) {
@@ -148,16 +150,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             if (treeNode.editNameFlag || $("#btnGroup"+treeNode.tId).length>0) return;
                             var s = '<span id="btnGroup'+treeNode.tId+'">';
                             if ( treeNode.level == 0 ) {
-                                s += '<a onclick="saveMenu(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" >&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
+                                s += '<a onclick="savePermission(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" >&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
+                                s += '<a onclick="updatePermission(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
                             } else if ( treeNode.level == 1 ) {
-                                s += '<a onclick="updateMenu(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
-                                if (treeNode.children.length == 0) {
-                                    s += '<a onclick="deleteMenu(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" >&nbsp;&nbsp;<i class="fa fa-fw fa-times rbg "></i></a>';
-                                }
-                                s += '<a onclick="saveMenu(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" >&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
-                            } else if ( treeNode.level == 2 ) {
-                                s += '<a onclick="updateMenu(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
-                                s += '<a onclick="deleteMenu(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;">&nbsp;&nbsp;<i class="fa fa-fw fa-times rbg "></i></a>';
+                                s += '<a onclick="updatePermission(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
+                                s += '<a onclick="deletePermission(' + treeNode.id + ')" class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" >&nbsp;&nbsp;<i class="fa fa-fw fa-times rbg "></i></a>';
                             }
             
                             s += '</span>';
@@ -169,16 +166,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				    }
 		        };
 
-		        $.get("menu/getMenuTree",function(result){
+		        $.get("permission/getPermissionTree",function(result){
 		            var zNodes = result;
-		            zNodes.push({id: 0,name: "菜单列表", icon: "glyphicon glyphicon-triangle-bottom"});
 		            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
 		            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
                     treeObj.expandAll(true);
 		        });
             }
             //=======================================添加 开始=============================================
-            function saveMenu(pid) {
+            function savePermission(pid) {
                 $("#saveModal").modal({
                     show : true
                 });
@@ -190,12 +186,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     var pid = $("#pid").val();
                     var name = $("#name").val();
                     var icon = $("#icon").val();
-                    var url = $("#url").val();
+                    var title = $("#title").val();
                     var index = -1;
                     $.ajax({
                         type : "POST",
-                        url : "menu/saveMenu",
-                        data : {pid : pid, name : name, icon : icon, url : url},
+                        url : "permission/savePermission",
+                        data : {pid : pid, name : name, icon : icon, title : title},
                         beforeSend : function() {
                             index = layer.load(0, {time:5*1000});
                             return true;
@@ -203,7 +199,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         success : function(result) {
                             if(result == "ok") {
                                 layer.msg("添加成功", {icon : 1, time : 500});
-                                initMenuTree();
+                                initPermissionTree();
                             }else {
                                 layer.msg("添加失败", {icon : 2, time : 500});
                             }
@@ -213,13 +209,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     });
                     $("#name").val("");
                     $("#icon").val("");
-                    $("#url").val("");
+                    $("#title").val("");
                 });
             //=======================================添加 结束=============================================
             
             
             //=======================================修改 开始=============================================
-            function updateMenu(id) {
+            function updatePermission(id) {
                 //弹出模态框
                  $("#updateModal").modal({
                     show : true
@@ -228,7 +224,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 var index = -1;
                 $.ajax({
                     type : "GET",
-                    url : "menu/getMenuById",
+                    url : "permission/getPermissionById",
                     data : {id : id},
                     beforeSend : function() {
                             index = layer.load(0, {time:5*1000});
@@ -238,7 +234,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         $("#update-id").val(result.id);
                         $("#update-name").val(result.name);
                         $("#update-icon").val(result.icon);
-                        $("#update-url").val(result.url);
+                        $("#update-title").val(result.title);
                     }
                 });
                 layer.close(index);
@@ -249,8 +245,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 var index = -1;
                 $.ajax({
                     type : "POST",
-                    url : "menu/updateMenu",
-                    data : {id : $("#update-id").val(), name : $("#update-name").val(), icon :  $("#update-icon").val(), url : $("#update-url").val()},
+                    url : "permission/updatePermission",
+                    data : {id : $("#update-id").val(), name : $("#update-name").val(), icon :  $("#update-icon").val(), title : $("#update-title").val()},
                     beforeSend : function() {
                             index = layer.load(0, {time:5*1000});
                             return true;
@@ -258,7 +254,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     success : function(result) {
                         if(result == "ok") {
                                 layer.msg("修改成功", {icon : 1, time : 500});
-                                initMenuTree();
+                                initPermissionTree();
                             }else {
                                 layer.msg("修改失败", {icon : 2, time : 500});
                             }
@@ -266,17 +262,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
                 layer.close(index);
                 $("#updateModal").modal("hide");
-                initMenuTree();
+                initPermissionTree();
             });
             //=======================================修改 结束=============================================
             
             //=======================================删除 开始=============================================
-            function deleteMenu(id) {
+            function deletePermission(id) {
                 layer.confirm("确定删除吗", {icon: 3, title:'提示'},function(index) {
                     var i = -1;
                     $.ajax({
                     type:"POST",
-                    url:"menu/deleteMenu",
+                    url:"permission/deletePermission",
                     data:{id:id},
                     beforeSend:function() {
                         i = layer.load(0, {time:10*1000});
@@ -286,7 +282,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         layer.close(i);
                         if(result == "ok"){
                             layer.msg("删除成功", {icon : 1, time : 500});
-                            initMenuTree();
+                            initPermissionTree();
                         }else {
                             layer.msg("删除失败", {icon : 2, time : 500});
                         }

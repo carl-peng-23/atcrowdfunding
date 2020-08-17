@@ -25,6 +25,12 @@
 			<groupId>com.atecut.atcrowdfunding</groupId>
 			<artifactId>atcrowdfunding-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- 业务层需要的所有框架 -->
 		<!--公共依赖结束 -->

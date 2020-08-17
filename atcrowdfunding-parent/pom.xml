@@ -49,6 +49,7 @@
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.6</slf4j.version>
         <logback.version>1.2.3</logback.version>
+        <jcl.over.slf4j>1.7.25</jcl.over.slf4j>
 
         <!-- servlet-api，jsp-api，jstl -->
         <servlet-api.version>2.5</servlet-api.version>
@@ -257,6 +258,12 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${jcl.over.slf4j}</version>
             </dependency>
 
             <!-- 依赖的WEB类库 -->

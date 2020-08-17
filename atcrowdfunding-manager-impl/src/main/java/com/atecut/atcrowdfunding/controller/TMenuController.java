@@ -18,7 +18,7 @@ public class TMenuController {
 	TMenuService menuService;
 	
 	@RequestMapping("/menu/index")
-	public String batchDelete() {
+	public String index() {
 		return "menu/index";
 	}
 	
@@ -51,7 +51,7 @@ public class TMenuController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/menu/getMentById")
+	@RequestMapping("/menu/getMenuById")
 	public TMenu getMentById(@RequestParam(value = "id") Integer id) {
 		TMenu menu = menuService.getMenuById(id);
 		return menu;
