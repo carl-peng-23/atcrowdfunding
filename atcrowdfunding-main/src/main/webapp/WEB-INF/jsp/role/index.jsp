@@ -63,6 +63,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- -----------------------------------分配权限模态框---------------------------------------------------- -->
+<div id="assignPermissionModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">给角色分配权限</h4>
+             <div class="zTreeDemoBackground left">
+                 <ul id="treeDemo" class="ztree"></ul>
+             </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button id="assignPermissionBtn" type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
     <div class="container-fluid">
       <div class="row">
@@ -219,10 +237,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
             //-------------------------添加功能over-----------------------------
 
-            //=========================添加功能start=============================
+            //=========================删除功能start=============================
             
-            
-            //-------------------------删除功能over-----------------------------
             $("tbody").on("click",".delete",function(){
                 var id = $(this).attr("roleId");
                 layer.confirm("确定删除吗", {icon: 3, title:'提示'},function(index) {
@@ -252,6 +268,114 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
             });
             
+            //-------------------------删除功能over-----------------------------
+            
+            //=========================给角色分配权限 功能start=============================
+            var roleId;
+            $("tbody").on("click",".assignPermission",function(){
+                roleId = $(this).attr("roleId");
+                //弹出模态框
+                 $("#assignPermissionModal").modal({
+                    show : true
+                });
+                initPermissionTree();
+            });
+            
+            $("#assignPermissionBtn").click(function() {
+                //获得角色id，以及复选框对应的权限id
+                var json = {roleId : roleId};
+                var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                var nodes = treeObj.getCheckedNodes(true);
+                var flag = false;
+                $.each(nodes, function(i, node) {
+                    json['ids[' + i + ']'] = node.id;
+                    if(node.checked == true)
+                       flag = true;
+                });
+                
+                if(flag == false) {
+                    $.ajax({
+                    type : "POST",
+                    url : "role/deleteRolePernissionRelationship",
+                    data : {roleId, roleId},
+                    success : function(result) {
+                        if(result == "ok") {
+                            $("#assignPermissionModal").modal('hide');
+                            layer.msg('分配成功!', {icon: 6, time: 1000});
+                        }else {
+                            layer.msg('分配失败!', {icon: 5, time: 1000});
+                        }
+                    }
+                });
+                    return false;
+                }
+                
+                                
+                //发起异步请求插入t_role_permission角色权限表
+                $.ajax({
+                    type : "POST",
+                    url : "role/saveRolePernissionRelationship",
+                    data : json,
+                    success : function(result) {
+                        if(result == "ok") {
+                            $("#assignPermissionModal").modal('hide');
+                            layer.msg('分配成功!', {icon: 6, time: 1000});
+                        }else {
+                            layer.msg('分配失败!', {icon: 5, time: 1000});
+                        }
+                    }
+                });
+            });
+            
+            
+            
+            function initPermissionTree() {
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            pIdKey: "pid",
+                        },
+                        key: {
+                            name: "title"
+                        }
+                    },
+                    check: {
+                        enable: true
+                    },
+                    view:{
+                        addDiyDom: function(treeId, treeNode) {
+                            $("#" + treeNode.tId + "_ico").removeClass();
+                            $("#" + treeNode.tId + "_span").before("<span class='" + treeNode.icon +"'></span>");
+                        }
+                    }
+                };
+
+                $.get("permission/getPermissionTree",function(result){
+                    var zNodes = result;
+                    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                    var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                    treeObj.expandAll(true);
+                    
+                    $.ajax({
+                        type : "GET",
+                        url : "role/getRolePermissionId",
+                        data : {roleId : roleId},
+                        success : function(result) {
+                            //给复选框回显
+                            $.each(result, function(i, e) {
+                                var permissionId = e ;
+                                var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                                var node = treeObj.getNodeByParam("id", permissionId, null);
+                                treeObj.checkNode(node, true, false , false);
+                            });
+                        }
+                    });
+                });
+            }
+            
+            //-------------------------给角色分配权限 功能over-----------------------------
+
             //===================================================================
             
             function initData(pageNum){
@@ -281,7 +405,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                content += '  <td><input type="checkbox"></td>';
 	                content += '  <td>' + e.name + '</td>';
 	                content += '  <td>';
-	                content += '      <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
+	                content += '      <button type="button" roleId="' + e.id +'" class="assignPermission btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
 	                content += '      <button type="button" roleId="' + e.id +'" class="update btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';
 	                content += '      <button type="button" roleId="' + e.id + '" class="delete btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>';
 	                content += '  </td>';

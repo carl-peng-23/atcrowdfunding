@@ -6,6 +6,23 @@
     <result column="adminid" jdbcType="INTEGER" property="adminid" />
     <result column="roleid" jdbcType="INTEGER" property="roleid" />
   </resultMap>
+  
+  <!-- void saveAdminAndRoleRelationship(@Param("adminId")Integer adminId, @Param("roleId")Integer[] roleId); -->
+  <insert id="saveAdminAndRoleRelationship">
+    INSERT INTO t_admin_role(adminid, roleid) VALUES
+    <foreach collection="roleId" item="roleId" separator=",">
+        (#{adminId}, #{roleId})
+    </foreach>
+  </insert>
+  
+  <!-- void deleteAdminAndRoleRelationship(Integer adminId, Integer[] roleId); -->
+  <delete id="deleteAdminAndRoleRelationship">
+    DELETE FROM t_admin_role WHERE adminid=#{adminId} AND roleid IN 
+    <foreach collection="roleId" item="roleid" open="(" close=")" separator=",">
+        #{roleid}
+    </foreach>
+  </delete>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

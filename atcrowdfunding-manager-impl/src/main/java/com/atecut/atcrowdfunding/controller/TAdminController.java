@@ -1,6 +1,7 @@
 package com.atecut.atcrowdfunding.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,9 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.atecut.atcrowdfunding.bean.TAdmin;
+import com.atecut.atcrowdfunding.bean.TRole;
 import com.atecut.atcrowdfunding.service.TAdminService;
+import com.atecut.atcrowdfunding.service.TRoleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -23,6 +27,8 @@ public class TAdminController {
 	
 	@Autowired
 	TAdminService adminService;
+	@Autowired
+	TRoleService roleService;
 	
 	@RequestMapping("/admin/index")
 	public String index(@RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
@@ -74,5 +80,27 @@ public class TAdminController {
 		log.debug("pageNum={}", pageNum);
 		adminService.batchDeleteByATdminId(ids);
 		return "redirect:/admin/index?pageNum=" + pageNum;
+	}
+
+	@RequestMapping("/admin/assignRole")
+	public String assignRole(Integer id, Model model) {
+		log.debug("id={}", id);
+		Map<String,List<TRole>> map = roleService.getAssignedAndUnssignedRole(id);
+		model.addAttribute("assignedAndUnssignedRole",map);
+		return "/admin/assignRole";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/admin/saveAdminAndRoleRelationship")
+	public String saveAdminAndRoleRelationship(Integer adminId, Integer[] roleId) {
+		roleService.saveAdminAndRoleRelationship(adminId, roleId);
+		return "ok";
+	}
+
+	@ResponseBody
+	@RequestMapping("/admin/deleteAdminAndRoleRelationship")
+	public String deleteAdminAndRoleRelationship(Integer adminId, Integer[] roleId) {
+		roleService.deleteAdminAndRoleRelationship(adminId, roleId);
+		return "ok";
 	}
 }

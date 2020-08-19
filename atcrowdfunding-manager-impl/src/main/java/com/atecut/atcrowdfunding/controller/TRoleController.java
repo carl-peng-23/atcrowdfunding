@@ -1,6 +1,7 @@
 package com.atecut.atcrowdfunding.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.atecut.atcrowdfunding.bean.TRole;
 import com.atecut.atcrowdfunding.service.TRoleService;
+import com.atecut.atcrowdfunding.util.Datas;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -81,4 +83,31 @@ public class TRoleController {
 		roleService.deleteRole(id);
 		return "ok";
 	}
+
+	@ResponseBody
+	@RequestMapping("/role/saveRolePernissionRelationship")
+	public String saveRolePernissionRelationship(Integer roleId, Datas ids) {
+		log.debug("roleId:{}", roleId);
+		log.debug("ids:{}", ids.getIds());
+		roleService.deleteRolePernissionRelationship(roleId);
+		roleService.saveRolePernissionRelationship(roleId, ids.getIds());
+		return "ok";
+	}
+
+	@ResponseBody
+	@RequestMapping("/role/getRolePermissionId")
+	public List<Integer> getRolePermissionId(Integer roleId) {
+		log.debug("roleId:{}", roleId);
+		List<Integer> list = roleService.getRolePermissionId(roleId);
+		return list;
+	}
+
+	@ResponseBody
+	@RequestMapping("/role/deleteRolePernissionRelationship")
+	public String deleteRolePernissionRelationship(Integer roleId) {
+		log.debug("roleId:{}", roleId);
+		roleService.deleteRolePernissionRelationship(roleId);
+		return "ok";
+	}
+	
 }

@@ -24,7 +24,6 @@ public class TAdminServiceImpl implements TAdminService {
 	@Autowired
 	TAdminMapper adminMapper;
 
-
 	@Override
 	public TAdmin getTAdminByLogin(Map<String, Object> paramMap) throws LoginException {
 		
