@@ -8,6 +8,20 @@
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="pid" jdbcType="INTEGER" property="pid" />
   </resultMap>
+  
+  <!-- List<TPermission> listPermissionByAdminId(Integer id); -->
+  <select id="listPermissionByAdminId" resultMap="BaseResultMap">
+    SELECT t_permission.* FROM t_admin
+    INNER JOIN t_admin_role ON t_admin.id
+    = t_admin_role.adminid
+    INNER JOIN t_role_permission ON
+    t_admin_role.roleid = t_role_permission.roleid
+    INNER JOIN t_permission
+    ON t_role_permission.permissionid = t_permission.id
+    WHERE t_admin.id = #{adminId};
+  </select>
+  
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

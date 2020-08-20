@@ -61,9 +61,9 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-            <!-- 目标环境已经有了 -->
             <scope>provided</scope>
         </dependency>
+        <!-- 目标环境已经有了 -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>

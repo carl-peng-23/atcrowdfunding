@@ -5,6 +5,18 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
+  
+  <!-- List<TRole> listRoleByAdminId(Integer id); -->
+  <select id="listRoleByAdminId" resultMap="BaseResultMap">
+	SELECT t_role.*
+	FROM t_admin
+	INNER JOIN t_admin_role
+	ON t_admin.id = t_admin_role.adminid
+	INNER JOIN t_role
+	ON t_role.id = t_admin_role.roleid
+	WHERE t_admin.id = #{adminId};
+  </select>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

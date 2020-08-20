@@ -36,11 +36,12 @@
 
 		<form id="loginForm" class="form-signin" role="form" action="doLogin"
 			method="post">
+			<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
 			<h2 class="form-signin-heading">
 			    <i class="glyphicon glyphicon-log-in"></i> 用户登录
 			</h2>
-			<c:if test="${!empty requestScope.message }">
-			    <div class="form-group has-success has-feedback" style="color:red">${requestScope.message }</div>
+			<c:if test="${!empty SPRING_SECURITY_LAST_EXCEPTION.message }">
+			    <div class="form-group has-success has-feedback" style="color:red">${SPRING_SECURITY_LAST_EXCEPTION.message }</div>
 			</c:if>
 			<div class="form-group has-success has-feedback">
 				<input type="text" class="form-control" id="loginacct" value="zhangsan" 
@@ -54,7 +55,7 @@
 			</div>
 
 			<div class="checkbox">
-				<label> <input type="checkbox" value="remember-me">
+				<label> <input type="checkbox" name="remember-me">
 					记住我
 				</label> <br> <label> 忘记密码 </label> <label style="float:right">
 					<a href="reg.html">我要注册</a>

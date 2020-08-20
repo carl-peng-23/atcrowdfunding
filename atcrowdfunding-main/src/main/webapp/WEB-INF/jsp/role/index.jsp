@@ -226,6 +226,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            if(result == "ok") {
                                layer.msg('添加成功!', {icon: 1, time: 1000});  
                                initData(1);
+                           }else if(result == "403") {
+                               layer.msg('您无权访问!', {icon: 2, time: 1000});
                            }else {
                                layer.msg('添加失败!', {icon: 2, time: 1000});
                            }
